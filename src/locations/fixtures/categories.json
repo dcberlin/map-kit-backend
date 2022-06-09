@@ -1,0 +1,101 @@
+[
+  {
+    "model": "locations.category",
+    "pk": 1,
+    "fields": {
+      "name_slug": "counceling-center",
+      "label_singular": "Birou de consiliere",
+      "label_plural": "Birouri de consiliere"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 2,
+    "fields": {
+      "name_slug": "institution-or-ngo",
+      "label_singular": "Instituție/asociație",
+      "label_plural": "Instituții/asociații"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 3,
+    "fields": {
+      "name_slug": "food",
+      "label_singular": "Mâncare",
+      "label_plural": "Mâncare"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 4,
+    "fields": {
+      "name_slug": "attorney",
+      "label_singular": "Avocat",
+      "label_plural": "Avocați"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 5,
+    "fields": {
+      "name_slug": "parcel-service",
+      "label_singular": "Firmă de curierat",
+      "label_plural": "Firme de curierat"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 6,
+    "fields": {
+      "name_slug": "cultural-venue",
+      "label_singular": "Spațiu cultural",
+      "label_plural": "Spații culturale"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 7,
+    "fields": {
+      "name_slug": "ngo",
+      "label_singular": "Asociație",
+      "label_plural": "Asociații"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 8,
+    "fields": {
+      "name_slug": "church",
+      "label_singular": "Biserică",
+      "label_plural": "Biserici"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 9,
+    "fields": {
+      "name_slug": "medic",
+      "label_singular": "Medic",
+      "label_plural": "Medici"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 10,
+    "fields": {
+      "name_slug": "translator",
+      "label_singular": "Traducător",
+      "label_plural": "Traducători"
+    }
+  },
+  {
+    "model": "locations.category",
+    "pk": 11,
+    "fields": {
+      "name_slug": "accountant",
+      "label_singular": "Contabil",
+      "label_plural": "Contabili"
+    }
+  }
+]
