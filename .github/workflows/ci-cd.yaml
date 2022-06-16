@@ -1,0 +1,35 @@
+name: Quality Checks
+
+on: [push]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Set env variables
+      run: source .env
+
+    - name: Build the docker-compose stack
+      run: docker-compose up -d
+
+    - name: Wait for app to be ready
+      run: |
+        wget http://localhost:8000/health/ \
+        --timeout=30 --waitretry=2 \
+        --tries=15 --retry-connrefused
+
+    - name: Run formatting check
+      run: docker-compose exec -T map-kit-api black --check .
+
+    - name: Run tests
+      run: docker-compose exec -T map-kit-api pytest src/tests/
