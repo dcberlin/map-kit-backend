@@ -1,11 +1,12 @@
 from django.contrib.gis.db import models as gis_models
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
 class Community(gis_models.Model):
     name = models.CharField(null=True, blank=True, max_length=128)
     description = models.TextField(null=True, blank=True, max_length=500)
-    region_bbox = gis_models.PolygonField(null=True)
+    bbox = ArrayField(models.FloatField(), size=4, null=True)
     published = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
 

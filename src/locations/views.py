@@ -1,9 +1,12 @@
+from django_filters import rest_framework as filters
 from django.contrib.postgres.search import SearchVector
 from rest_framework import generics, viewsets
+from rest_framework_gis.filters import InBBoxFilter
 
-from .models import Category, Location
+from .models import Category, Community, Location
 from .serializers import (
     CategorySerializer,
+    CommunitySerializer,
     LocationProposalSerializer,
     LocationSerializer,
 )
@@ -17,8 +20,10 @@ ViewSets
 class LocationViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Location.objects.filter(published=True, geographic_entity=True)
     serializer_class = LocationSerializer
-    filterset_fields = ("category",)
+    filterset_fields = ("category", "community")
+    filter_backends = (InBBoxFilter, filters.DjangoFilterBackend)
     throttle_scope = "read-only"
+    bbox_filter_field = "point"
 
     def get_queryset(self):
         """
@@ -43,6 +48,11 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all().order_by("label_plural")
     serializer_class = CategorySerializer
     throttle_scope = "read-only"
+
+
+class CommunityViewSet(viewsets.ModelViewSet):
+    queryset = Community.objects.all()
+    serializer_class = CommunitySerializer
 
 
 """
