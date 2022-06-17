@@ -1,7 +1,25 @@
+from django.contrib.gis.geos import Polygon
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from .models import Location, Category
+from .models import Location, Category, Community
+
+
+class CommunitySerializer(serializers.ModelSerializer):
+    bbox = serializers.ListField(child=serializers.FloatField(), required=False)
+
+    def validate_bbox(self, value):
+        Polygon.from_bbox(tuple(value))
+        return value
+
+    class Meta:
+        model = Community
+        fields = [
+            "pk",
+            "name",
+            "description",
+            "bbox",
+        ]
 
 
 class CategorySerializer(serializers.ModelSerializer):

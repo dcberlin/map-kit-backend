@@ -1,12 +1,18 @@
 from rest_framework.routers import SimpleRouter
 from rest_framework.urls import path
 
-from .views import CategoryViewSet, LocationViewSet, LocationProposalView
+from .views import (
+    CategoryViewSet,
+    CommunityViewSet,
+    LocationViewSet,
+    LocationProposalView,
+)
 
 router = SimpleRouter()
 
 router.register(r"locations", LocationViewSet)
 router.register(r"categories", CategoryViewSet)
+router.register(r"community", CommunityViewSet)
 
 
 urlpatterns = [
