@@ -34,7 +34,10 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class LocationSerializer(GeoFeatureModelSerializer):
-    category = CategorySerializer()
+    category = serializers.SlugRelatedField(
+        queryset=Category.objects.all(),
+        slug_field="name_slug",
+    )
 
     class Meta:
         model = Location

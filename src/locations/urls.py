@@ -12,7 +12,7 @@ router = SimpleRouter()
 
 router.register(r"locations", LocationViewSet)
 router.register(r"categories", CategoryViewSet)
-router.register(r"community", CommunityViewSet)
+router.register(r"communities", CommunityViewSet)
 
 
 urlpatterns = [
