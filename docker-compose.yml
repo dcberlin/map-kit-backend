@@ -19,6 +19,7 @@ services:
 
   map-kit-api:
     container_name: map-kit-api
+    restart: "always"
     build: 
       context: .
       args:
@@ -36,6 +37,10 @@ services:
       - ALLOWED_HOSTS
       - CORS_ALLOW_ALL_ORIGINS
       - DJANGO_SETTINGS_MODULE
+      - SOCIAL_AUTH_AUTH0_DOMAIN
+      - SOCIAL_AUTH_AUTH0_KEY
+      - SOCIAL_AUTH_AUTH0_SECRET
+
     volumes:
       - .:/app
     ports:

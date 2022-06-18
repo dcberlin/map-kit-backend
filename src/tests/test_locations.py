@@ -6,9 +6,8 @@ from locations.models import Category, Location
 
 @pytest.mark.django_db
 def test_get_published_location(client):
-    category_name = "Consiliere"
     location_name = "Biroul X"
-    category = Category(label_singular=category_name)
+    category = Category(name_slug="counselling")
     category.save()
     location = Location(
         name=location_name,
@@ -25,7 +24,7 @@ def test_get_published_location(client):
 
     feature_properties = response_body["features"][0]["properties"]
     assert feature_properties["name"] == location_name
-    assert feature_properties["category"]["label_singular"] == category_name
+    assert feature_properties["category"] == category.name_slug
 
 
 @pytest.mark.django_db

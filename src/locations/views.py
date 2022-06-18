@@ -1,4 +1,9 @@
 from django_filters import rest_framework as filters
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    AllowAny,
+)
 from django.contrib.postgres.search import SearchVector
 from rest_framework import generics, viewsets
 from rest_framework_gis.filters import InBBoxFilter
@@ -10,6 +15,7 @@ from .serializers import (
     LocationProposalSerializer,
     LocationSerializer,
 )
+from .permissions import IsApprovedUser, IsApprovedUserOrReadOnly
 
 
 """
@@ -17,7 +23,8 @@ ViewSets
 """
 
 
-class LocationViewSet(viewsets.ReadOnlyModelViewSet):
+class LocationViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsApprovedUserOrReadOnly]
     queryset = Location.objects.filter(published=True, geographic_entity=True)
     serializer_class = LocationSerializer
     filterset_fields = ("category", "community")
@@ -45,12 +52,14 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsApprovedUserOrReadOnly]
     queryset = Category.objects.all().order_by("label_plural")
     serializer_class = CategorySerializer
     throttle_scope = "read-only"
 
 
 class CommunityViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
 
@@ -61,5 +70,6 @@ Generic views
 
 
 class LocationProposalView(generics.CreateAPIView):
+    permission_classes = [AllowAny]
     serializer_class = LocationProposalSerializer
     throttle_scope = "location-proposal"

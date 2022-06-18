@@ -1,3 +1,4 @@
+from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models as gis_models
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
@@ -15,6 +16,10 @@ class Community(gis_models.Model):
 
     class Meta:
         verbose_name_plural = "Communities"
+
+
+class User(AbstractUser):
+    approved = models.BooleanField(default=False)
 
 
 class Location(gis_models.Model):

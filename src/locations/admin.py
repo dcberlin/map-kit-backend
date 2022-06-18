@@ -1,11 +1,17 @@
+from django.contrib.auth.admin import UserAdmin
 from django.contrib.gis import admin
 
-from .models import Location, Category
+from .models import Location, Category, User
 from .helpers import set_coordinates_from_address
 
 
+@admin.register(User)
+class User(UserAdmin):
+    fieldsets = UserAdmin.fieldsets + ((None, {"fields": ("approved",)}),)
+
+
 @admin.register(Location)
-class LocationAdmin(admin.OSMGeoAdmin):
+class LocationAdmin(admin.GISModelAdmin):
     list_display = (
         "name",
         "category",
@@ -31,5 +37,5 @@ class LocationAdmin(admin.OSMGeoAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.OSMGeoAdmin):
+class CategoryAdmin(admin.GISModelAdmin):
     verbose_name = "Categories"
