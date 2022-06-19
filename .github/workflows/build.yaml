@@ -20,15 +20,20 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install doctl 
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_OCEAN_ACCESS_TOKEN }}
+
       - name: Build image
         run: docker build . --tag $BACKEND_IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
 
-      - name: Log into registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Log in to DO Container Registry 
+        run: doctl registry login --expiry-seconds 600
 
       - name: Publish image
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$BACKEND_IMAGE_NAME
+          IMAGE_ID=registry.digitalocean.com/map-kit-backend/$BACKEND_IMAGE_NAME
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           # Strip git ref prefix from version
