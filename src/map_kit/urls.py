@@ -25,7 +25,6 @@ urlpatterns = [
     re_path("^admin/", admin.site.urls),
     re_path("^api/", include("locations.urls")),
     re_path("^health/", include("health_check.urls")),
-    path("", include("social_django.urls")),
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(
         "api/schema/swagger-ui/",
