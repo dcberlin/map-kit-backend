@@ -38,12 +38,16 @@ class LocationSerializer(GeoFeatureModelSerializer):
         queryset=Category.objects.all(),
         slug_field="name_slug",
     )
+    community = serializers.PrimaryKeyRelatedField(
+        queryset=Community.objects.all(),
+    )
 
     class Meta:
         model = Location
         geo_field = "point"
         fields = [
             "pk",
+            "community",
             "name",
             "address",
             "website",

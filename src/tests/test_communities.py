@@ -43,12 +43,18 @@ def test_create_location_forbidden(client, user_unapproved):
 
 @pytest.mark.django_db
 def test_create_location_authorized(client, user_approved):
+    community = Community(name="Berlin")
+    community.save()
     category = Category(name_slug="bakery")
     category.save()
     client.force_login(user_approved)
     response = client.post(
         "/api/locations/",
-        {"name": "Brutaria de la coltz", "category": category.name_slug},
+        {
+            "name": "Brutaria de la coltz",
+            "category": category.name_slug,
+            "community": community.pk,
+        },
     )
     assert response.status_code == HTTPStatus.CREATED
 
