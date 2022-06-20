@@ -31,6 +31,8 @@ ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
 
 CORS_ALLOW_ALL_ORIGINS = bool(os.environ.get("CORS_ALLOW_ALL_ORIGINS", False))
 
+CSRF_TRUSTED_ORIGINS = ["https://*.diasporacivica.berlin"]
+
 AUTH_USER_MODEL = "locations.User"
 
 
