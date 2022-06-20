@@ -63,6 +63,9 @@ class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
 
+    def perform_create(self, serializer):
+        serializer.save(admin_users=[self.request.user])
+
 
 """
 Generic views

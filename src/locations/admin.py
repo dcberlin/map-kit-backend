@@ -1,7 +1,7 @@
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.gis import admin
 
-from .models import Location, Category, User
+from .models import Location, Category, Community, User
 from .helpers import set_coordinates_from_address
 
 
@@ -39,3 +39,8 @@ class LocationAdmin(admin.GISModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.GISModelAdmin):
     verbose_name = "Categories"
+
+
+@admin.register(Community)
+class CategoryAdmin(admin.ModelAdmin):
+    verbose_name = "Communities"
