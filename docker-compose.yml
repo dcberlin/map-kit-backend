@@ -44,7 +44,6 @@ services:
       - OIDC_OP_TOKEN_ENDPOINT
       - OIDC_OP_USER_ENDPOINT
 
-
     volumes:
       - .:/app
     ports:
