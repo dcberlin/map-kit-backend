@@ -189,7 +189,7 @@ OIDC_OP_USER_ENDPOINT = os.environ.get("OIDC_OP_USER_ENDPOINT")
 
 AUTHENTICATION_BACKENDS = (
     "django.contrib.auth.backends.ModelBackend",
-    "mozilla_django_oidc.auth.OIDCAuthenticationBackend",
+    "locations.auth.MapKitOIDCAuthenticationBackend",
 )
 
 SPECTACULAR_SETTINGS = {
