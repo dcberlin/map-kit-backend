@@ -1,6 +1,5 @@
 from django_filters import rest_framework as filters
 from rest_framework.permissions import (
-    IsAuthenticated,
     IsAuthenticatedOrReadOnly,
     AllowAny,
 )
@@ -15,7 +14,7 @@ from .serializers import (
     LocationProposalSerializer,
     LocationSerializer,
 )
-from .permissions import IsApprovedUser, IsApprovedUserOrReadOnly
+from .permissions import IsApprovedUser, IsCommunityAdmin, ReadOnly
 
 
 """
@@ -24,7 +23,7 @@ ViewSets
 
 
 class LocationViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsApprovedUserOrReadOnly]
+    permission_classes = [(IsApprovedUser & IsCommunityAdmin) | ReadOnly]
     queryset = Location.objects.filter(published=True, geographic_entity=True)
     serializer_class = LocationSerializer
     filterset_fields = ("category", "community")
@@ -52,7 +51,7 @@ class LocationViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [IsApprovedUserOrReadOnly]
+    permission_classes = [IsApprovedUser | ReadOnly]
     queryset = Category.objects.all().order_by("label_plural")
     serializer_class = CategorySerializer
     throttle_scope = "read-only"
