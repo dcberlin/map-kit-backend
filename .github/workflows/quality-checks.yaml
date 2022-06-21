@@ -24,7 +24,7 @@ jobs:
 
     - name: Wait for app to be ready
       run: |
-        wget http://localhost:8000/health/ \
+        wget http://localhost:8000/admin/ \
         --timeout=30 --waitretry=2 \
         --tries=15 --retry-connrefused
 
