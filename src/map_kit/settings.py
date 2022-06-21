@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     "corsheaders",
     "locations",
     "health_check",
+    "health_check.db",
+    "health_check.contrib.migrations",
     "drf_spectacular",
     "mozilla_django_oidc",
 ]

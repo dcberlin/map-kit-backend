@@ -32,7 +32,7 @@ def test_create_community(client, user_unapproved):
 
 
 @pytest.mark.django_db
-def test_create_location_forbidden(client, user_unapproved):
+def test_create_location_unapproved_user(client, user_unapproved):
     client.force_login(user_unapproved)
     response = client.post(
         "/api/locations/",
@@ -42,8 +42,50 @@ def test_create_location_forbidden(client, user_unapproved):
 
 
 @pytest.mark.django_db
+def test_create_location_in_another_community(client, user_approved):
+    client.force_login(user_approved)
+    community = Community(name="Berlin")  # Community has no admins
+    community.save()
+    category = Category(name_slug="bakery")
+    category.save()
+    response = client.post(
+        "/api/locations/",
+        {
+            "name": "Brutaria de la coltz",
+            "community": community.pk,
+            "category": category.name_slug,
+        },
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+
+
+@pytest.mark.django_db
+def test_update_location_in_another_community(client, user_approved):
+    client.force_login(user_approved)
+    community_1 = Community(name="Berlin")  # Community has no admins
+    community_1.save()
+    community_2 = Community(name="Hamburg")  # Community has no admins
+    community_2.save()
+    category = Category(name_slug="bakery")
+    category.save()
+    location = Location(name="Brutaria de la coltz", community=community_1)
+    response = client.put(
+        f"/api/locations/{location.pk}/",
+        {
+            "name": "Pwned",
+            "category": category.name_slug,
+            "community": community_2.pk,
+        },
+        content_type="application/json",
+    )
+    assert response.status_code == HTTPStatus.FORBIDDEN
+
+
+@pytest.mark.django_db
 def test_create_location_authorized(client, user_approved):
     community = Community(name="Berlin")
+    community.save()
+    community.admin_users.set([user_approved])
     community.save()
     category = Category(name_slug="bakery")
     category.save()

@@ -40,6 +40,7 @@ class LocationSerializer(GeoFeatureModelSerializer):
     )
     community = serializers.PrimaryKeyRelatedField(
         queryset=Community.objects.all(),
+        required=True,
     )
 
     class Meta:
