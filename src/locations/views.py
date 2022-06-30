@@ -1,7 +1,7 @@
 from django_filters import rest_framework as filters
 from rest_framework.permissions import (
     IsAuthenticated,
-    IsAuthenticatedOrReadOnly,
+    IsAdminUser,
     AllowAny,
 )
 from django.contrib.postgres.search import SearchVector
@@ -51,8 +51,8 @@ class LocationViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [IsApprovedUser | ReadOnly]
+class CategoryViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAdminUser | ReadOnly]
     queryset = Category.objects.all().order_by("label_plural")
     serializer_class = CategorySerializer
     throttle_scope = "read-only"
