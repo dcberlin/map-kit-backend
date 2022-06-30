@@ -1,8 +1,23 @@
+import time
+
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.gis import admin
 
 from .models import Location, Category, Community, User
 from .helpers import set_coordinates_from_address
+
+
+@admin.action(description="Mark selected locations as published")
+def make_published(modeladmin, request, queryset):
+    queryset.update(published=True)
+
+
+@admin.action(description="Geocode the addresses of the selected locations")
+def make_geocoded(modeladmin, request, queryset):
+    locations = queryset.filter(address__isnull=False)
+    for location in locations:
+        set_coordinates_from_address(location.address, location)
+        time.sleep(0.5)
 
 
 @admin.register(User)
@@ -20,6 +35,7 @@ class LocationAdmin(admin.GISModelAdmin):
         "coordinates",
         "user_submitted",
     )
+    actions = [make_published, make_geocoded]
 
     default_lon = 1489458
     default_lat = 6894156
