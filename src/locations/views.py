@@ -58,8 +58,8 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     throttle_scope = "read-only"
 
 
-class CommunityViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
+class CommunityViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [ReadOnly]
     filterset_fields = ("path_slug",)
     filter_backends = (filters.DjangoFilterBackend,)
     queryset = Community.objects.filter(approved=True, published=True)
