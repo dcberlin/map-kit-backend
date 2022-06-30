@@ -43,7 +43,9 @@ class LocationSerializer(GeoFeatureModelSerializer):
         queryset=Category.objects.all(),
         slug_field="name_slug",
     )
-    pin_color = serializers.CharField(source="category.color")
+    pin_color = serializers.CharField(
+        source="category.color", read_only=True, default="#fff"
+    )
     community = serializers.PrimaryKeyRelatedField(
         queryset=Community.objects.all(),
         required=True,
