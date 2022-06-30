@@ -42,5 +42,5 @@ class CategoryAdmin(admin.GISModelAdmin):
 
 
 @admin.register(Community)
-class CategoryAdmin(admin.ModelAdmin):
+class CommunityAdmin(admin.ModelAdmin):
     verbose_name = "Communities"

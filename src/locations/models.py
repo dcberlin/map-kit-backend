@@ -11,18 +11,16 @@ class User(AbstractUser):
 
 
 class Community(gis_models.Model):
-    name = models.CharField(null=True, blank=True, max_length=128)
+    name = models.CharField(null=False, blank=False, max_length=128)
     description = models.TextField(null=True, blank=True, max_length=500)
     bbox = ArrayField(models.FloatField(), size=4, null=True)
     published = models.BooleanField(default=False)
     approved = models.BooleanField(default=False)
     admin_users = models.ManyToManyField(User)
+    path_slug = models.SlugField(unique=True, null=True)
 
     def __str__(self):
         return self.name
-
-    class Meta:
-        verbose_name_plural = "Communities"
 
 
 class Location(gis_models.Model):

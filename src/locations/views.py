@@ -27,7 +27,7 @@ class LocationViewSet(viewsets.ModelViewSet):
     permission_classes = [(IsApprovedUser & IsCommunityAdmin) | ReadOnly]
     queryset = Location.objects.filter(published=True, geographic_entity=True)
     serializer_class = LocationSerializer
-    filterset_fields = ("category", "community")
+    filterset_fields = ("category", "community", "community__path_slug")
     filter_backends = (InBBoxFilter, filters.DjangoFilterBackend)
     throttle_scope = "read-only"
     bbox_filter_field = "point"
@@ -60,6 +60,8 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CommunityViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    filterset_fields = ("path_slug",)
+    filter_backends = (filters.DjangoFilterBackend,)
     queryset = Community.objects.filter(approved=True, published=True)
     serializer_class = CommunitySerializer
 

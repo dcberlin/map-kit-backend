@@ -22,6 +22,7 @@ class CommunitySerializer(serializers.ModelSerializer):
             "approved",
             "published",
             "bbox",
+            "path_slug",
         ]
 
 
