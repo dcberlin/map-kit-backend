@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_gis",
     "corsheaders",
+    "colorfield",
     "locations",
     "health_check",
     "health_check.db",

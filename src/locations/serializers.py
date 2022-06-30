@@ -31,6 +31,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = [
             "pk",
             "name_slug",
+            "color",
             "label_singular",
             "label_plural",
         ]
@@ -41,6 +42,7 @@ class LocationSerializer(GeoFeatureModelSerializer):
         queryset=Category.objects.all(),
         slug_field="name_slug",
     )
+    pin_color = serializers.CharField(source="category.color")
     community = serializers.PrimaryKeyRelatedField(
         queryset=Community.objects.all(),
         required=True,
@@ -62,6 +64,7 @@ class LocationSerializer(GeoFeatureModelSerializer):
             "geographic_entity",
             "inexact_location",
             "published",
+            "pin_color",
         ]
 
 

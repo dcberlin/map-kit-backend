@@ -3,6 +3,8 @@ from django.contrib.gis.db import models as gis_models
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
+from colorfield.fields import ColorField
+
 
 class User(AbstractUser):
     approved = models.BooleanField(default=False)
@@ -56,6 +58,7 @@ class Category(models.Model):
     name_slug = models.SlugField(null=False, blank=False)
     label_singular = models.CharField(max_length=64, null=False, blank=False)
     label_plural = models.CharField(max_length=64, null=False, blank=False)
+    color = ColorField(null=False, blank=False)
 
     def __str__(self):
         return self.name_slug
