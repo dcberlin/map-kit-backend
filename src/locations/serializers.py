@@ -7,6 +7,7 @@ from .models import Location, Category, Community
 
 class CommunitySerializer(serializers.ModelSerializer):
     bbox = serializers.ListField(child=serializers.FloatField(), required=False)
+    approved = serializers.BooleanField(read_only=True)
 
     def validate_bbox(self, value):
         Polygon.from_bbox(tuple(value))
@@ -18,7 +19,10 @@ class CommunitySerializer(serializers.ModelSerializer):
             "pk",
             "name",
             "description",
+            "approved",
+            "published",
             "bbox",
+            "path_slug",
         ]
 
 
@@ -28,6 +32,7 @@ class CategorySerializer(serializers.ModelSerializer):
         fields = [
             "pk",
             "name_slug",
+            "color",
             "label_singular",
             "label_plural",
         ]
@@ -37,6 +42,9 @@ class LocationSerializer(GeoFeatureModelSerializer):
     category = serializers.SlugRelatedField(
         queryset=Category.objects.all(),
         slug_field="name_slug",
+    )
+    pin_color = serializers.CharField(
+        source="category.color", read_only=True, default="#fff"
     )
     community = serializers.PrimaryKeyRelatedField(
         queryset=Community.objects.all(),
@@ -59,6 +67,7 @@ class LocationSerializer(GeoFeatureModelSerializer):
             "geographic_entity",
             "inexact_location",
             "published",
+            "pin_color",
         ]
 
 

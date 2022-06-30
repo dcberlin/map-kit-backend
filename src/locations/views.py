@@ -1,5 +1,6 @@
 from django_filters import rest_framework as filters
 from rest_framework.permissions import (
+    IsAuthenticated,
     IsAuthenticatedOrReadOnly,
     AllowAny,
 )
@@ -26,7 +27,7 @@ class LocationViewSet(viewsets.ModelViewSet):
     permission_classes = [(IsApprovedUser & IsCommunityAdmin) | ReadOnly]
     queryset = Location.objects.filter(published=True, geographic_entity=True)
     serializer_class = LocationSerializer
-    filterset_fields = ("category", "community")
+    filterset_fields = ("category", "community", "community__path_slug")
     filter_backends = (InBBoxFilter, filters.DjangoFilterBackend)
     throttle_scope = "read-only"
     bbox_filter_field = "point"
@@ -57,13 +58,23 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
     throttle_scope = "read-only"
 
 
-class CommunityViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Community.objects.all()
+class CommunityViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [ReadOnly]
+    filterset_fields = ("path_slug",)
+    filter_backends = (filters.DjangoFilterBackend,)
+    queryset = Community.objects.filter(approved=True, published=True)
+    serializer_class = CommunitySerializer
+
+
+class CommunityAdminViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated]
     serializer_class = CommunitySerializer
 
     def perform_create(self, serializer):
         serializer.save(admin_users=[self.request.user])
+
+    def get_queryset(self):
+        return Community.objects.filter(admin_users__in=[self.request.user])
 
 
 """

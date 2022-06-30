@@ -21,11 +21,11 @@ def user_unapproved():
 
 @pytest.mark.django_db
 def test_create_community(client, user_unapproved):
-    community_name = "Harta Diasporei din Berlin"
+    community_name = "Berlin"
     client.force_login(user_unapproved)
     response = client.post(
-        "/api/communities/",
-        {"name": community_name},
+        "/api/communities-admin/",
+        {"name": community_name, "slug": "berlin"},
     )
     assert response.status_code == HTTPStatus.CREATED
     assert response.json()["name"] == community_name
@@ -87,7 +87,7 @@ def test_create_location_authorized(client, user_approved):
     community.save()
     community.admin_users.set([user_approved])
     community.save()
-    category = Category(name_slug="bakery")
+    category = Category(name_slug="bakery", color="#fff")
     category.save()
     client.force_login(user_approved)
     response = client.post(
@@ -105,13 +105,15 @@ def test_create_location_authorized(client, user_approved):
 def test_create_community_w_location_and_filter(client, user_approved):
     client.force_login(user_approved)
 
+    category = Category(name_slug="bakery")
+    category.save()
     community_name = "Harta Diasporei din Offenbach"
     offenbach_bbox = [8.692245, 50.076091, 8.837814, 50.139065]
     location_name = "Scoala de muzica"
     location_point = Point(8.792145, 50.092794)
 
     create_community_response = client.post(
-        "/api/communities/",
+        "/api/communities-admin/",
         {
             "name": community_name,
             "bbox": offenbach_bbox,
@@ -126,12 +128,14 @@ def test_create_community_w_location_and_filter(client, user_approved):
         point=location_point,
         published=True,
         community=Community.objects.get(pk=community_pk),
+        category=category,
     )
     offenbach_location.save()
     berlin_location = Location(
         name=location_name,
         point=Point(13.4267284, 52.5530381),
         published=True,
+        category=category,
     )
     berlin_location.save()
 
