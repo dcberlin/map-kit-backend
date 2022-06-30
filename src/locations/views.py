@@ -59,11 +59,22 @@ class CategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 class CommunityViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
-    queryset = Community.objects.all()
+    queryset = Community.objects.filter(approved=True, published=True)
     serializer_class = CommunitySerializer
 
     def perform_create(self, serializer):
         serializer.save(admin_users=[self.request.user])
+
+    def get_queryset(self):
+        """
+        Optionally filters the returned communities by community admin user.
+        """
+        if (
+            self.request.user.is_authenticated
+            and self.request.query_params.get("admin") == "true"
+        ):
+            return Community.objects.filter(admin_users__in=[self.request.user])
+        return self.queryset
 
 
 """

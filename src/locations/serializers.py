@@ -7,6 +7,7 @@ from .models import Location, Category, Community
 
 class CommunitySerializer(serializers.ModelSerializer):
     bbox = serializers.ListField(child=serializers.FloatField(), required=False)
+    approved = serializers.BooleanField(read_only=True)
 
     def validate_bbox(self, value):
         Polygon.from_bbox(tuple(value))
@@ -18,6 +19,8 @@ class CommunitySerializer(serializers.ModelSerializer):
             "pk",
             "name",
             "description",
+            "approved",
+            "published",
             "bbox",
         ]
 
