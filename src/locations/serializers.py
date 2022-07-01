@@ -43,6 +43,9 @@ class LocationSerializer(GeoFeatureModelSerializer):
         queryset=Category.objects.all(),
         slug_field="name_slug",
     )
+    category_label = serializers.CharField(
+        source="category.label_singular", read_only=True, default=""
+    )
     pin_color = serializers.CharField(
         source="category.color", read_only=True, default="#fff"
     )
@@ -68,6 +71,7 @@ class LocationSerializer(GeoFeatureModelSerializer):
             "inexact_location",
             "published",
             "pin_color",
+            "category_label",
         ]
 
 
