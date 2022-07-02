@@ -2,7 +2,7 @@ from django.contrib.gis.geos import Polygon
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from .models import Location, Category, Community
+from .models import Location, Category, Community, User
 
 
 class CommunitySerializer(serializers.ModelSerializer):
@@ -146,3 +146,11 @@ class LocationProposalSerializer(GeoFeatureModelSerializer):
             field: {"required": True}
             for field in ["name", "address", "description", "community"]
         }
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "approved",
+        ]

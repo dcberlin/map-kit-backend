@@ -7,6 +7,8 @@ from rest_framework.permissions import (
 from django.contrib.postgres.search import SearchVector
 from rest_framework import generics, viewsets
 from rest_framework_gis.filters import InBBoxFilter
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import Category, Community, Location
 from .serializers import (
@@ -15,6 +17,7 @@ from .serializers import (
     LocationProposalSerializer,
     LocationSerializer,
     PlainLocationSerializer,
+    UserSerializer,
 )
 from .permissions import IsApprovedUser, IsCommunityAdmin, ReadOnly
 
@@ -25,7 +28,7 @@ ViewSets
 
 
 class LocationViewSet(viewsets.ReadOnlyModelViewSet):
-    permission_classes = [(IsApprovedUser & IsCommunityAdmin) | ReadOnly]
+    permission_classes = [ReadOnly]
     queryset = Location.objects.filter(published=True, geographic_entity=True)
     serializer_class = LocationSerializer
     filterset_fields = ("category", "community", "community__path_slug")
@@ -53,7 +56,9 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class LocationAdminViewSet(viewsets.ModelViewSet):
-    permission_classes = [IsApprovedUser & IsCommunityAdmin]
+    permission_classes = [
+        (IsApprovedUser & IsCommunityAdmin) | (IsAuthenticated & ReadOnly)
+    ]
     queryset = Location.objects.filter()
     serializer_class = PlainLocationSerializer
     filterset_fields = ("category", "community")
@@ -100,3 +105,11 @@ class LocationProposalView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = LocationProposalSerializer
     throttle_scope = "location-proposal"
+
+
+class UserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)

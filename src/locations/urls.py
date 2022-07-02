@@ -8,6 +8,7 @@ from .views import (
     LocationAdminViewSet,
     LocationViewSet,
     LocationProposalView,
+    UserView,
 )
 
 router = SimpleRouter()
@@ -23,6 +24,7 @@ router.register(
 
 urlpatterns = [
     path("location-proposal/", LocationProposalView.as_view()),
+    path("user/", UserView.as_view()),
 ]
 
 urlpatterns += router.urls
