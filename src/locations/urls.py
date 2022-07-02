@@ -5,14 +5,17 @@ from .views import (
     CategoryViewSet,
     CommunityViewSet,
     CommunityAdminViewSet,
+    LocationAdminViewSet,
     LocationViewSet,
     LocationProposalView,
+    UserView,
 )
 
 router = SimpleRouter()
 
-router.register(r"locations", LocationViewSet)
 router.register(r"categories", CategoryViewSet)
+router.register(r"locations", LocationViewSet)
+router.register(r"locations-admin", LocationAdminViewSet, basename="locations-admin")
 router.register(r"communities", CommunityViewSet)
 router.register(
     r"communities-admin", CommunityAdminViewSet, basename="communities-admin"
@@ -21,6 +24,7 @@ router.register(
 
 urlpatterns = [
     path("location-proposal/", LocationProposalView.as_view()),
+    path("user/", UserView.as_view()),
 ]
 
 urlpatterns += router.urls

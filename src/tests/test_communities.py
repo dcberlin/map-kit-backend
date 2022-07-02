@@ -35,7 +35,7 @@ def test_create_community(client, user_unapproved):
 def test_create_location_unapproved_user(client, user_unapproved):
     client.force_login(user_unapproved)
     response = client.post(
-        "/api/locations/",
+        "/api/locations-admin/",
         {"name": "Brutaria de la coltz"},
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
@@ -49,7 +49,7 @@ def test_create_location_in_another_community(client, user_approved):
     category = Category(name_slug="bakery")
     category.save()
     response = client.post(
-        "/api/locations/",
+        "/api/locations-admin/",
         {
             "name": "Brutaria de la coltz",
             "community": community.pk,
@@ -70,7 +70,7 @@ def test_update_location_in_another_community(client, user_approved):
     category.save()
     location = Location(name="Brutaria de la coltz", community=community_1)
     response = client.put(
-        f"/api/locations/{location.pk}/",
+        f"/api/locations-admin/{location.pk}/",
         {
             "name": "Pwned",
             "category": category.name_slug,
@@ -91,7 +91,7 @@ def test_create_location_authorized(client, user_approved):
     category.save()
     client.force_login(user_approved)
     response = client.post(
-        "/api/locations/",
+        "/api/locations-admin/",
         {
             "name": "Brutaria de la coltz",
             "category": category.name_slug,

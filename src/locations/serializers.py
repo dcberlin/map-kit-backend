@@ -2,7 +2,7 @@ from django.contrib.gis.geos import Polygon
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
-from .models import Location, Category, Community
+from .models import Location, Category, Community, User
 
 
 class CommunitySerializer(serializers.ModelSerializer):
@@ -39,6 +39,51 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class LocationSerializer(GeoFeatureModelSerializer):
+    """
+    GeoJSON locations
+    """
+
+    category = serializers.SlugRelatedField(
+        queryset=Category.objects.all(),
+        slug_field="name_slug",
+    )
+    category_label = serializers.CharField(
+        source="category.label_singular", read_only=True, default=""
+    )
+    pin_color = serializers.CharField(
+        source="category.color", read_only=True, default="#fff"
+    )
+    community = serializers.PrimaryKeyRelatedField(
+        queryset=Community.objects.all(),
+        required=True,
+    )
+
+    class Meta:
+        model = Location
+        geo_field = "point"
+        fields = [
+            "pk",
+            "community",
+            "name",
+            "address",
+            "website",
+            "email",
+            "description",
+            "category",
+            "phone",
+            "geographic_entity",
+            "inexact_location",
+            "published",
+            "pin_color",
+            "category_label",
+        ]
+
+
+class PlainLocationSerializer(serializers.ModelSerializer):
+    """
+    Non-GeoJSON locations (for admin endpoints etc.)
+    """
+
     category = serializers.SlugRelatedField(
         queryset=Category.objects.all(),
         slug_field="name_slug",
@@ -101,3 +146,11 @@ class LocationProposalSerializer(GeoFeatureModelSerializer):
             field: {"required": True}
             for field in ["name", "address", "description", "community"]
         }
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            "approved",
+        ]
