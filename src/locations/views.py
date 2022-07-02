@@ -14,6 +14,7 @@ from .serializers import (
     CommunitySerializer,
     LocationProposalSerializer,
     LocationSerializer,
+    PlainLocationSerializer,
 )
 from .permissions import IsApprovedUser, IsCommunityAdmin, ReadOnly
 
@@ -23,7 +24,7 @@ ViewSets
 """
 
 
-class LocationViewSet(viewsets.ModelViewSet):
+class LocationViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [(IsApprovedUser & IsCommunityAdmin) | ReadOnly]
     queryset = Location.objects.filter(published=True, geographic_entity=True)
     serializer_class = LocationSerializer
@@ -49,6 +50,19 @@ class LocationViewSet(viewsets.ModelViewSet):
                 )
             ).filter(search=str(search_phrase))
         return queryset
+
+
+class LocationAdminViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsApprovedUser & IsCommunityAdmin]
+    queryset = Location.objects.filter()
+    serializer_class = PlainLocationSerializer
+    filterset_fields = ("category", "community")
+    filter_backends = (filters.DjangoFilterBackend,)
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+            return self.queryset.filter(community__admin_users__in=[self.request.user])
+        return self.queryset
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

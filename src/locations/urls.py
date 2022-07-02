@@ -5,14 +5,16 @@ from .views import (
     CategoryViewSet,
     CommunityViewSet,
     CommunityAdminViewSet,
+    LocationAdminViewSet,
     LocationViewSet,
     LocationProposalView,
 )
 
 router = SimpleRouter()
 
-router.register(r"locations", LocationViewSet)
 router.register(r"categories", CategoryViewSet)
+router.register(r"locations", LocationViewSet)
+router.register(r"locations-admin", LocationAdminViewSet, basename="locations-admin")
 router.register(r"communities", CommunityViewSet)
 router.register(
     r"communities-admin", CommunityAdminViewSet, basename="communities-admin"
