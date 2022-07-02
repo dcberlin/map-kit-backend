@@ -95,7 +95,9 @@ class LocationProposalSerializer(GeoFeatureModelSerializer):
             "description",
             "phone",
             "user_submitted",
+            "community",
         ]
         extra_kwargs = {
-            field: {"required": True} for field in ["name", "address", "description"]
+            field: {"required": True}
+            for field in ["name", "address", "description", "community"]
         }
