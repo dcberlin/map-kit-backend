@@ -13,11 +13,12 @@ The Map Kit allows members of these communities to create their own map based ap
 ### First steps
 
 * Clone the repo.
-* Source the required env variables: `source .env`
 * Make sure you have Docker and Docker Compose installed.
-* Run all the required containers with `docker-compose up`.
+* Run all the required containers with `docker-compose up`. The minimum of env variables required to run the app will be picked up automatically from `.env` by Docker Compose.
 * Apply the migrations if you're setting up for the first time: `docker exec -t map-kit-api python src/manage.py migrate`
 * You're good to go! Any changes will be reflected in the containers as well, thanks to Docker volumes. The app is available under port `8000`.
+* Try out the public endpoints of the API! (e. g. `curl localhost:8000/api/categories/`)
+* Create a superuser for the Django admin with `docker exec -t map-kit-api python src/manage.py createsuperuser` and then log into the admin panel with those credentials: http://localhost:8000/admin
 
 ### Setting up authentication
 
