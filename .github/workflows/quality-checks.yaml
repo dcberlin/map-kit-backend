@@ -23,7 +23,7 @@ jobs:
       run: docker-compose up -d
 
     - name: Run migrations
-      run: docker-compose exec -it map-kit-api python /app/src/manage.py migrate
+      run: sleep 5 && docker-compose exec -T map-kit-api python /app/src/manage.py migrate
 
     - name: Wait for app to be ready
       run: |
