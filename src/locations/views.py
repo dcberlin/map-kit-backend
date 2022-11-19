@@ -29,7 +29,10 @@ ViewSets
 
 class LocationViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [ReadOnly]
-    queryset = Location.objects.filter(published=True, geographic_entity=True)
+    queryset = Location.objects.select_related("category").filter(
+        published=True,
+        geographic_entity=True,
+    )
     serializer_class = LocationSerializer
     filterset_fields = ("category", "community", "community__path_slug")
     filter_backends = (InBBoxFilter, filters.DjangoFilterBackend)
