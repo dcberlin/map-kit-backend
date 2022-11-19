@@ -51,6 +51,9 @@ class Location(gis_models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        indexes = [models.Index(fields=["geographic_entity", "published", "community"])]
+
 
 class Category(models.Model):
     name_slug = models.SlugField(null=False, blank=False)
