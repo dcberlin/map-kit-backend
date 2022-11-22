@@ -32,6 +32,56 @@ def test_create_community(client, user_unapproved):
 
 
 @pytest.mark.django_db
+def test_create_community_with_location(client, user_approved):
+    community_name = "Giessen"
+    client.force_login(user_approved)
+    category = Category(name_slug="bakery")
+    category.save()
+
+    # Create community
+    com_response = client.post(
+        "/api/communities-admin/",
+        {"name": community_name, "slug": "giessen"},
+    )
+    assert com_response.status_code == HTTPStatus.CREATED
+    community_pk = com_response.json()["pk"]
+
+    # Create POI
+    poi_response = client.post(
+        "/api/locations-admin/",
+        {
+            "name": "Brutaria de la coltz",
+            "community": community_pk,
+            "category": category.name_slug,
+        },
+    )
+    assert poi_response.status_code == HTTPStatus.CREATED
+    location_pk = poi_response.json()["pk"]
+
+    get_poi_response = client.get(
+        f"/api/locations-admin/{location_pk}/",
+    )
+
+    # Publish location
+    patch_poi_response = client.patch(
+        f"/api/locations-admin/{location_pk}/",
+        json={
+            "published": True,
+        },
+    )
+    assert patch_poi_response.status_code == HTTPStatus.OK
+
+    # Publish community
+    patch_com_response = client.patch(
+        f"/api/communities-admin/{community_pk}/",
+        json={
+            "published": True,
+        },
+    )
+    assert patch_com_response.status_code == HTTPStatus.OK
+
+
+@pytest.mark.django_db
 def test_create_location_unapproved_user(client, user_unapproved):
     client.force_login(user_unapproved)
     response = client.post(

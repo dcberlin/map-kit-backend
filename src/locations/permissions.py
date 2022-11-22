@@ -17,10 +17,14 @@ class IsCommunityAdmin(permissions.BasePermission):
         if community_pk := view.request.data.get("community"):
             community = Community.objects.get(pk=community_pk)
             return community.admin_users.contains(request.user)
+        if pk := view.kwargs.get("pk"):
+            location = view.queryset.get(pk=pk)
+            return location.community.admin_users.filter(pk=request.user.id).exists()
+
         return False
 
     def has_object_permission(self, request, _, obj):
-        return obj.community.admin_users.contains(request.user)
+        return obj.community.admin_users.filter(pk=request.user.id).exists()
 
 
 class IsApprovedUser(permissions.BasePermission):
