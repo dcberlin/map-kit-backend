@@ -49,10 +49,11 @@ def test_create_community_with_location(client, user_approved):
     # Create POI
     poi_response = client.post(
         "/api/locations-admin/",
-        {
+        json={
             "name": "Brutaria de la coltz",
             "community": community_pk,
             "category": category.name_slug,
+            "address": "Spandauer Damm 120, 14050 Berlin",
         },
     )
     assert poi_response.status_code == HTTPStatus.CREATED
@@ -142,10 +143,11 @@ def test_create_location_authorized(client, user_approved):
     client.force_login(user_approved)
     response = client.post(
         "/api/locations-admin/",
-        {
+        json={
             "name": "Brutaria de la coltz",
             "category": category.name_slug,
             "community": community.pk,
+            "address": "Spandauer Damm 120, 14050 Berlin",
         },
     )
     assert response.status_code == HTTPStatus.CREATED
