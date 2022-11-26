@@ -101,13 +101,13 @@ class PlainLocationSerializer(serializers.ModelSerializer):
     )
 
     def to_internal_value(self, data):
-        address = data.get("address")
-        if coordinates := get_coordinates_from_address(address):
-            data["point"] = Point(*coordinates)
-        else:
-            raise serializers.ValidationError(
-                {"address": ["Could not find coordinates for this address."]}
-            )
+        if address := data.get("address"):
+            if coordinates := get_coordinates_from_address(address):
+                data["point"] = Point(*coordinates)
+            else:
+                raise serializers.ValidationError(
+                    {"address": ["Could not find coordinates for this address."]}
+                )
         return super().to_internal_value(data)
 
     class Meta:
@@ -142,13 +142,13 @@ class LocationProposalSerializer(GeoFeatureModelSerializer):
     user_submitted = serializers.HiddenField(default=True)
 
     def to_internal_value(self, data):
-        address = data.get("address")
-        if coordinates := get_coordinates_from_address(address):
-            data["point"] = Point(*coordinates)
-        else:
-            raise serializers.ValidationError(
-                {"address": ["Could not find coordinates for this address."]}
-            )
+        if address := data.get("address"):
+            if coordinates := get_coordinates_from_address(address):
+                data["point"] = Point(*coordinates)
+            else:
+                raise serializers.ValidationError(
+                    {"address": ["Could not find coordinates for this address."]}
+                )
         return super().to_internal_value(data)
 
     class Meta:

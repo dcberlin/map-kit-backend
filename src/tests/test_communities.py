@@ -49,12 +49,13 @@ def test_create_community_with_location(client, user_approved):
     # Create POI
     poi_response = client.post(
         "/api/locations-admin/",
-        json={
+        {
             "name": "Brutaria de la coltz",
             "community": community_pk,
             "category": category.name_slug,
             "address": "Spandauer Damm 120, 14050 Berlin",
         },
+        content_type="application/json",
     )
     assert poi_response.status_code == HTTPStatus.CREATED
     location_pk = poi_response.json()["pk"]
@@ -66,18 +67,20 @@ def test_create_community_with_location(client, user_approved):
     # Publish location
     patch_poi_response = client.patch(
         f"/api/locations-admin/{location_pk}/",
-        json={
+        {
             "published": True,
         },
+        content_type="application/json",
     )
     assert patch_poi_response.status_code == HTTPStatus.OK
 
     # Publish community
     patch_com_response = client.patch(
         f"/api/communities-admin/{community_pk}/",
-        json={
+        {
             "published": True,
         },
+        content_type="application/json",
     )
     assert patch_com_response.status_code == HTTPStatus.OK
 
@@ -88,6 +91,7 @@ def test_create_location_unapproved_user(client, user_unapproved):
     response = client.post(
         "/api/locations-admin/",
         {"name": "Brutaria de la coltz"},
+        content_type="application/json",
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -106,6 +110,7 @@ def test_create_location_in_another_community(client, user_approved):
             "community": community.pk,
             "category": category.name_slug,
         },
+        content_type="application/json",
     )
     assert response.status_code == HTTPStatus.FORBIDDEN
 
@@ -143,12 +148,13 @@ def test_create_location_authorized(client, user_approved):
     client.force_login(user_approved)
     response = client.post(
         "/api/locations-admin/",
-        json={
+        {
             "name": "Brutaria de la coltz",
             "category": category.name_slug,
             "community": community.pk,
             "address": "Spandauer Damm 120, 14050 Berlin",
         },
+        content_type="application/json",
     )
     assert response.status_code == HTTPStatus.CREATED
 
@@ -170,6 +176,7 @@ def test_create_community_w_location_and_filter(client, user_approved):
             "name": community_name,
             "bbox": offenbach_bbox,
         },
+        content_type="application/json",
     )
     assert create_community_response.status_code == HTTPStatus.CREATED
     assert create_community_response.json()["bbox"] == offenbach_bbox
