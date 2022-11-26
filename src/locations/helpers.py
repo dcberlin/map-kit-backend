@@ -1,16 +1,16 @@
+from typing import Optional
+
 from django.contrib.gis.geos import Point
 import logging
-import time
 
 import geocoder
 
 logger = logging.getLogger(__name__)
 
 
-def set_coordinates_from_address(address, obj):
+def get_coordinates_from_address(address: str) -> Optional[list[float]]:
     """
-    Get the coordinates for an address by using the geocoder and set them
-    on a location object.
+    Return the coordinates for an address by using the geocoder.
     """
     g = geocoder.osm(address)
     if not g.ok:
@@ -18,5 +18,14 @@ def set_coordinates_from_address(address, obj):
         return
     logger.info("Geocoding successful for: '%s'", address)
     lat, lng = g.latlng
+    return [lng, lat]
+
+
+def set_coordinates_from_address(address, obj):
+    """
+    Get the coordinates for an address by using the geocoder and set them
+    on a location object.
+    """
+    lng, lat = get_coordinates_from_address(address)
     obj.point = Point(lng, lat)
     obj.save()

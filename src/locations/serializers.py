@@ -1,7 +1,8 @@
-from django.contrib.gis.geos import Polygon
+from django.contrib.gis.geos import Point, Polygon
 from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 
+from .helpers import get_coordinates_from_address
 from .models import Location, Category, Community, User
 
 
@@ -99,6 +100,16 @@ class PlainLocationSerializer(serializers.ModelSerializer):
         required=True,
     )
 
+    def to_internal_value(self, data):
+        address = data.get("address")
+        if coordinates := get_coordinates_from_address(address):
+            data["point"] = Point(*coordinates)
+        else:
+            raise serializers.ValidationError(
+                {"address": ["Could not find coordinates for this address."]}
+            )
+        return super().to_internal_value(data)
+
     class Meta:
         model = Location
         geo_field = "point"
@@ -117,6 +128,7 @@ class PlainLocationSerializer(serializers.ModelSerializer):
             "published",
             "pin_color",
             "category_label",
+            "point",
         ]
 
 
@@ -128,6 +140,16 @@ class LocationProposalSerializer(GeoFeatureModelSerializer):
     """
 
     user_submitted = serializers.HiddenField(default=True)
+
+    def to_internal_value(self, data):
+        address = data.get("address")
+        if coordinates := get_coordinates_from_address(address):
+            data["point"] = Point(*coordinates)
+        else:
+            raise serializers.ValidationError(
+                {"address": ["Could not find coordinates for this address."]}
+            )
+        return super().to_internal_value(data)
 
     class Meta:
         model = Location
@@ -141,6 +163,7 @@ class LocationProposalSerializer(GeoFeatureModelSerializer):
             "phone",
             "user_submitted",
             "community",
+            "point",
         ]
         extra_kwargs = {
             field: {"required": True}
