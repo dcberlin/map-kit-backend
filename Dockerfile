@@ -22,3 +22,6 @@ fi
 RUN pip uninstall --yes poetry
 
 RUN python /app/src/manage.py collectstatic
+
+ENTRYPOINT ["/app/scripts/entrypoint"]
+CMD ["/app/scripts/run"]

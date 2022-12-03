@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -e
+
+gunicorn \
+	--bind 0.0.0.0:8000 \
+	--chdir /app/src \
+	--worker-tmp-dir /dev/shm \
+	--workers 3 \
+	map_kit.wsgi:application
