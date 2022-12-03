@@ -226,14 +226,10 @@ SPECTACULAR_SETTINGS = {
 SILKY_AUTHENTICATION = True
 SILKY_AUTHORISATION = True
 
-EMAIL_BACKEND = os.environ.get("DJANGO_EMAIL_BACKEND")
-
-if EMAIL_BACKEND == "anymail.backends.mailgun.EmailBackend":
-    ANYMAIL = {
-        "MAILGUN_API_KEY": "<your Mailgun key>",
-        "MAILGUN_SENDER_DOMAIN": "mg.example.com",  # your Mailgun domain, if needed
-    }
-    DEFAULT_FROM_EMAIL = "you@example.com"  # if you don't already have this in settings
-    SERVER_EMAIL = "your-server@example.com"  # default from-email for Django errors
+match os.environ.get("DJANGO_EMAIL_BACKEND"):
+    case "anymail.backends.sendgrid.EmailBackend":
+        ANYMAIL = {
+            "SENDGRID_API_KEY": os.environ.get("SENDGRID_API_KEY"),
+        }
 
 MAPBOX_TOKEN = os.environ.get("MAPBOX_TOKEN", "")
