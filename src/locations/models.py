@@ -1,9 +1,8 @@
+from colorfield.fields import ColorField
 from django.contrib.auth.models import AbstractUser
 from django.contrib.gis.db import models as gis_models
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-
-from colorfield.fields import ColorField
 
 
 class User(AbstractUser):
@@ -19,14 +18,21 @@ class Community(gis_models.Model):
     admin_users = models.ManyToManyField(User)
     path_slug = models.SlugField(unique=True, null=True)
 
+    def admin_users_emails(self):
+        return [user.email for user in self.admin_users.all()]
+
     def __str__(self):
         return self.name
 
+    def has_minimum_pois(self):
+        return self.location_set.filter(published=True).count() >= 2
+
+    class Meta:
+        verbose_name_plural = "Communities"
+
 
 class Location(gis_models.Model):
-    name = models.CharField(
-        max_length=64,
-    )
+    name = models.CharField(max_length=64)
     address = models.CharField(null=True, blank=True, max_length=128)
     website = models.CharField(null=True, blank=True, max_length=128)
     email = models.CharField(null=True, blank=True, max_length=128)

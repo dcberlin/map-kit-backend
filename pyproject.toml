@@ -23,6 +23,7 @@ mozilla-django-oidc = "^2.0.0"
 sentry-sdk = "^1.5.12"
 django-colorfield = "^0.7.1"
 django-silk = "^5.0.2"
+django-anymail = "^8.6"
 
 [tool.poetry.dev-dependencies]
 black = "^22.3"

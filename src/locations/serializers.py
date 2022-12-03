@@ -14,6 +14,15 @@ class CommunitySerializer(serializers.ModelSerializer):
         Polygon.from_bbox(tuple(value))
         return value
 
+    def validate(self, data):
+        published = data.get("published")
+        community = self.instance or Community(**data)
+        if published and not community.has_minimum_pois():
+            raise serializers.ValidationError(
+                "A community map must have at least 2 published POIs to be published."
+            )
+        return data
+
     class Meta:
         model = Community
         fields = [

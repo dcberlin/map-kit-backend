@@ -1,6 +1,7 @@
-from django.contrib.gis.geos import Point
 from http import HTTPStatus
+
 import pytest
+from django.contrib.gis.geos import Point
 
 from locations.models import Category, Community, Location, User
 
@@ -46,7 +47,7 @@ def test_create_community_with_location(client, user_approved):
     assert com_response.status_code == HTTPStatus.CREATED
     community_pk = com_response.json()["pk"]
 
-    # Create POI
+    # Create 1st POI
     poi_response = client.post(
         "/api/locations-admin/",
         {
@@ -60,11 +61,7 @@ def test_create_community_with_location(client, user_approved):
     assert poi_response.status_code == HTTPStatus.CREATED
     location_pk = poi_response.json()["pk"]
 
-    get_poi_response = client.get(
-        f"/api/locations-admin/{location_pk}/",
-    )
-
-    # Publish location
+    # Publish 1st POI
     patch_poi_response = client.patch(
         f"/api/locations-admin/{location_pk}/",
         {
@@ -75,6 +72,42 @@ def test_create_community_with_location(client, user_approved):
     assert patch_poi_response.status_code == HTTPStatus.OK
 
     # Publish community
+    patch_com_response = client.patch(
+        f"/api/communities-admin/{community_pk}/",
+        {
+            "published": True,
+        },
+        content_type="application/json",
+    )
+    assert (
+        patch_com_response.status_code == HTTPStatus.BAD_REQUEST
+    )  # only 1 POI published in community
+
+    # Create 2nd POI
+    poi_response = client.post(
+        "/api/locations-admin/",
+        {
+            "name": "Brutaria de vizavi",
+            "community": community_pk,
+            "category": category.name_slug,
+            "address": "Spandauer Damm 121, 14050 Berlin",
+        },
+        content_type="application/json",
+    )
+    assert poi_response.status_code == HTTPStatus.CREATED
+    location_pk = poi_response.json()["pk"]
+
+    # Publish 2nd POI
+    patch_poi_response = client.patch(
+        f"/api/locations-admin/{location_pk}/",
+        {
+            "published": True,
+        },
+        content_type="application/json",
+    )
+    assert patch_poi_response.status_code == HTTPStatus.OK
+
+    # Tey and publish community again
     patch_com_response = client.patch(
         f"/api/communities-admin/{community_pk}/",
         {

@@ -18,7 +18,10 @@ The Map Kit allows members of these communities to create their own map based ap
 * Apply the migrations if you're setting up for the first time: `docker exec -t map-kit-api python src/manage.py migrate`
 * You're good to go! Any changes will be reflected in the containers as well, thanks to Docker volumes. The app is available under port `8000`.
 * Try out the public endpoints of the API! (e. g. `curl localhost:8000/api/categories/`)
-* Create a superuser for the Django admin with `docker exec -t map-kit-api python src/manage.py createsuperuser` and then log into the admin panel with those credentials: http://localhost:8000/admin
+* Create a superuser for the Django admin with `docker exec -t map-kit-api python src/manage.py createsuperuser` and then log into the admin panel with those credentials: http://localhost:8000/admin 
+  (make sure the email for this user will not coincide with the mail of your google account from which you'll create your working user (hint: admin@example.com), 
+  or otherwise, you'll get an error later when working with endpoints requiring a jwt, and in this case you can solve the problem by removing the user and registering it again (the 2 users with the same mail will be merged))
+* When you create a new username (google login, Auth0), make sure you set it to 'approved' in django's admin section, otherwise none of the api endpoints that require a jwt token (i.e. /my-communities/*) will work.
 
 ### Setting up authentication
 
