@@ -4,16 +4,24 @@ from django.dispatch import receiver
 
 from locations.models import Community
 
+COMMUNITY_PROPOSAL_TEMPLATE = (
+    "Salut!\n\nCineva tocmai a propus comunitatea {community_name}. Intră "
+    "pe Django admin (https://map-kit-api.diasporacivica.berlin/admin/) "
+    "ca să aprobi comunitatea nouă şi userul, dacă încă nu este aprobat."
+)
+
 
 @receiver(post_save, sender=Community)
 def notify_on_community_proposal(**kwargs):
     if kwargs.get("created") is True:
         instance = kwargs.get("instance")
-        print(f"New community instance created: {instance!r}")
+        email_body = COMMUNITY_PROPOSAL_TEMPLATE.format(
+            community_name=instance.name,
+        )
         email = mail.EmailMessage(
-            subject=f"New community {instance.name} proposed!",
-            body="A new community has been proposed.",  # TODO: Phrase a proper body
-            from_email="from@example.com",  # TODO: Change to the real one
-            to=["to1@example.com"],  # TODO: Change to the real one
+            subject=f"O nouă comunitate a fost propusă!",
+            body=email_body,
+            from_email="harta@diasporacivica.berlin",
+            to=["contact@diasporacivica.berlin"],
         )
         email.send()
