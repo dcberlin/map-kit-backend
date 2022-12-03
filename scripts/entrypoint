@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -e
+
+python /app/src/manage.py migrate --noinput
+
+exec "$@"
