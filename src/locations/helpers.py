@@ -1,5 +1,6 @@
 from typing import Optional
 
+from django.conf import settings
 from django.contrib.gis.geos import Point
 import logging
 
@@ -12,7 +13,11 @@ def get_coordinates_from_address(address: str) -> Optional[list[float]]:
     """
     Return the coordinates for an address by using the geocoder.
     """
-    g = geocoder.osm(address)
+    if (mapbox_token := settings.MAPBOX_TOKEN) == "":
+        g = geocoder.osm(address)
+    else:
+        g = geocoder.mapbox(address, key=mapbox_token)
+
     if not g.ok:
         logger.warning("Geocoder could not find result for '%s'", g.json)
         return
