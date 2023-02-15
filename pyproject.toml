@@ -7,7 +7,7 @@ license = "Apache License"
 
 [tool.poetry.dependencies]
 python = "^3.10"
-Django = "^4.0"
+Django = "^4.1"
 djangorestframework = "^3.13"
 psycopg2-binary = "^2.8"
 djangorestframework-gis = "^1.0"
