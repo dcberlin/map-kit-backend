@@ -74,6 +74,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "mozilla_django_oidc",
     "silk",
+    "anymail",
 ]
 
 MIDDLEWARE = [
@@ -179,6 +180,11 @@ REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
     ],
+    "DEFAULT_PARSER_CLASSES": [
+        "rest_framework.parsers.JSONParser",
+        "rest_framework.parsers.FormParser",
+        "rest_framework.parsers.MultiPartParser",
+    ],
     "DEFAULT_THROTTLE_CLASSES": [
         "rest_framework.throttling.ScopedRateThrottle",
     ],
@@ -225,4 +231,24 @@ SPECTACULAR_SETTINGS = {
 SILKY_AUTHENTICATION = True
 SILKY_AUTHORISATION = True
 
+EMAIL_BACKEND = os.environ.get(
+    "DJANGO_EMAIL_BACKEND", "django.core.mail.backends.console.EmailBackend"
+)
+
+match EMAIL_BACKEND:
+    case "anymail.backends.sendgrid.EmailBackend":
+        ANYMAIL = {
+            "SENDGRID_API_KEY": os.environ.get("SENDGRID_API_KEY"),
+        }
+
 MAPBOX_TOKEN = os.environ.get("MAPBOX_TOKEN", "")
+
+ADMIN_URL = os.environ.get(
+    "ADMIN_URL", "https://map-kit-api.diasporacivica.berlin/admin/"
+)
+SUPERADMIN_CONTACT_EMAIL = os.environ.get(
+    "ADMIN_CONTACT_EMAIL", "contact@diasporacivica.berlin"
+)
+DEFAULT_FROM_EMAIL = os.environ.get(
+    "DEFAULT_FROM_EMAIL", "Harta Diasporei <info@hartadiasporei.org>"
+)

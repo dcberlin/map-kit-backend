@@ -1,5 +1,4 @@
 from django.urls import include
-
 from rest_framework.routers import SimpleRouter
 from rest_framework.urls import path
 
