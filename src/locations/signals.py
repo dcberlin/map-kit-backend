@@ -25,7 +25,7 @@ def on_community_proposal(**kwargs):
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[settings.SUPERADMIN_CONTACT_EMAIL],
     )
-    email.template_id = "d-9a97252feff540d0b026edb02945f8d9"
+    email.template_id = settings.EMAIL_TEMPLATE_ID
     email.merge_global_data = tpl_data
     try_send_email(email)
 

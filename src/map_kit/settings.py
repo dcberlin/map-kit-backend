@@ -252,3 +252,4 @@ SUPERADMIN_CONTACT_EMAIL = os.environ.get(
 DEFAULT_FROM_EMAIL = os.environ.get(
     "DEFAULT_FROM_EMAIL", "Harta Diasporei <info@hartadiasporei.org>"
 )
+EMAIL_TEMPLATE_ID = os.environ.get("EMAIL_TEMPLATE_ID")
