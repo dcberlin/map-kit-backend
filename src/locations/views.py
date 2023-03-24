@@ -83,8 +83,8 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
 
         # mail the community managers
         email = AnymailMessage(
-            template_id="d-0027bd8f47014d0f8db249acd97939ce",
             subject="A fost raportată o locație",
+            template_id=settings.SENDGRID_TPL_LOCATION_FLAG_MANAGER,
             body=f"Tocmai a fost raportată locația {location.name} din comunitatea ta <a href='{community_public_url}'>{location.community.name}</a>. \n"
             f"Te rog să verifici și să o publici dacă este corectă. \n"
             f"Poți face acest lucru <a href='{manager_location_url}'>aici</a>",
@@ -92,7 +92,6 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
             to=location.community.admin_users_emails(),
             bcc=[settings.SUPERADMIN_CONTACT_EMAIL],
         )
-        email.template_id = "d-0027bd8f47014d0f8db249acd97939ce"
         email.dynamic_template_data = tpl_data
         email.merge_global_data = tpl_data
         try_send_email(email)
@@ -104,8 +103,8 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
             else ""
         )
         email = AnymailMessage(
-            template_id="d-a7a22635a4744c829b951760d76ac8f4",
             subject="flag locatie",
+            template_id=settings.SENDGRID_TPL_LOCATION_FLAG_SUPERADMIN,
             body=f"Locația '{location.name}' din comunitatea {location.community.name} "
             f"a fost raportată de {html.escape(request.data.get('email'))}{phone} pentru următorul motiv: \n\n"
             f"<b>{html.escape(request.data.get('text'))}</b>\n\n"
@@ -141,6 +140,7 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
 
         email = AnymailMessage(
             subject="Cerere modificare locație",
+            template_id=settings.SENDGRID_TPL_LOCATION_CHANGE_PROPOSAL,
             body=f"Tocmai a propus cineva schimbări la locația {location.name} "
             f"din comunitatea ta <a href='{community_public_url}'>{location.community.name}. \n"
             f"Te rog verifică și <a href='{manager_location_url}'>schimbă locația</a> manual dacă e cazul. \n\n"
@@ -150,7 +150,6 @@ class LocationViewSet(viewsets.ReadOnlyModelViewSet):
             to=location.community.admin_users_emails(),
             bcc=[settings.SUPERADMIN_CONTACT_EMAIL],
         )
-        email.template_id = "d-4ebe3b84eebf408fb4d72d019d5b4801"
         email.merge_global_data = tpl_data
         try_send_email(email)
 
