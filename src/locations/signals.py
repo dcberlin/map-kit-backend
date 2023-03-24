@@ -68,7 +68,7 @@ def community_data(community: Community):
         "community_name": html.escape(community.name),
         "url_community": url_community,
         "url_community_manager": url_community_manager,
-        "url_community_admin": f"https://hartadiasporei.org/admin/locations/community/{community.id}/change/",
+        "url_community_admin": f"{settings.ADMIN_URL}locations/community/{community.id}/change/",
         "community_managers": ", ".join(community.admin_users_emails()),
     }
     return url_community, url_community_manager, tpl_data
@@ -80,9 +80,7 @@ def location_data(location: Location):
         if location.community
         else ""
     )
-    url_location_admin = (
-        f"https://hartadiasporei.org/admin/locations/location/{location.id}/change/"
-    )
+    url_location_admin = f"{settings.ADMIN_URL}locations/location/{location.id}/change/"
     url_community_manager = (
         f"https://hartadiasporei.org/my-communities/{location.community.id}"
         if location.community
