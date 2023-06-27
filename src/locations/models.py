@@ -37,7 +37,7 @@ class Location(gis_models.Model):
     website = models.CharField(null=True, blank=True, max_length=128)
     email = models.CharField(null=True, blank=True, max_length=128)
     phone = models.CharField(null=True, blank=True, max_length=32)
-    description = models.TextField(null=True, blank=True, max_length=500)
+    description = models.TextField(null=True, blank=True, max_length=1024)
     point = gis_models.PointField(
         null=True,
         blank=True,
