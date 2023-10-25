@@ -20,13 +20,18 @@ def on_community_proposal(**kwargs):
     url_community, url_community_manager, tpl_data = community_data(community)
 
     email = AnymailMessage(
-        subject="A fost propusă o nouă comunitate",
         template_id=settings.SENDGRID_TPL_NEW_COMMUNITY_PROPOSAL,
-        body=f"Tocmai a fost propusă comunitatea <a href='{settings.ADMIN_URL}locations/community/{community.id}/change/'>{community.name}</a>.",
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[settings.SUPERADMIN_CONTACT_EMAIL],
+        merge_global_data=tpl_data,
     )
-    email.merge_global_data = tpl_data
+
+    # Only set subject and body in development mode, otherwise it interferes with
+    # the SendGrid dynamic templates.
+    if settings.EMAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
+        email.subject = "A fost propusă o nouă comunitate"
+        email.body = f"Tocmai a fost propusă comunitatea {community.name}."
+
     try_send_email(email)
 
 
@@ -46,16 +51,18 @@ def on_location_proposal(**kwargs):
 
     # then mail the community managers
     email = AnymailMessage(
-        subject="A fost propusă o noua locație",
         template_id=settings.SENDGRID_TPL_NEW_LOCATION,
-        body=f"Tocmai a fost propusă locația {location.name} în comunitatea ta {location.community.name}. Te rog să o verifici "
-        f"și să o publici dacă este corectă. Poți face acest lucru <a href='{url_community_manager}'>aici</a>: "
-        f"{url_community_manager}",
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=location.community.admin_users_emails(),
         bcc=[settings.SUPERADMIN_CONTACT_EMAIL],
+        merge_global_data=tpl_data,
     )
-    email.merge_global_data = tpl_data
+
+    # Only set subject and body in development mode, otherwise it interferes with
+    # the SendGrid dynamic templates.
+    if settings.EMAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
+        email.subject = "A fost propusă o nouă locație"
+        email.body = f"Tocmai a fost propusă locația {location.name}"
 
     try_send_email(email)
 
