@@ -55,6 +55,7 @@ We use Auth0 because it makes managing multiple authentication providers (Google
 ### Set-up
 
 1. Adjust Auth0 variables (prefixed `OIDC_`) in .env.
+2. Use an exising [Mapbox](https://account.mapbox.com/) token or create a new one, and add it as `MAPBOX_TOKEN` to .env.
 2. Build your containers again.
 
 **TODO**

@@ -20,6 +20,8 @@ jobs:
       run: source .env
 
     - name: Build the docker-compose stack
+      env:
+        MAPBOX_TOKEN: ${{ secrets.MAPBOX_TOKEN }}
       run: docker-compose up -d
 
     - name: Run migrations

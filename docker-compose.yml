@@ -45,6 +45,7 @@ services:
             - DJANGO_SETTINGS_MODULE
             - DJANGO_EMAIL_BACKEND
             - SENDGRID_API_KEY
+            - MAPBOX_TOKEN
             - OIDC_RP_CLIENT_ID
             - OIDC_RP_CLIENT_SECRET
             - OIDC_OP_JWKS_ENDPOINT
