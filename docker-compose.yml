@@ -1,60 +1,64 @@
-version: "3.9"
-
 services:
-  map-kit-db:
-    container_name: map-kit-db
-    image: postgis/postgis:13-master
-    expose: 
-      - 5432
-    ports:
-      - "5432:5432"
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 3s
-      timeout: 30s
-      retries: 10
-    environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-    volumes: 
-    - postgres-data:/var/lib/postgresql/data
+    map-kit-db:
+        container_name: map-kit-db
+        image: postgis/postgis:13-master
+        expose:
+            - 5432
+        ports:
+            - "5432:5432"
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 3s
+            timeout: 30s
+            retries: 10
+        environment:
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
 
-  map-kit-api:
-    container_name: map-kit-api
-    restart: "always"
-    build: 
-      context: .
-      args:
-        ENV: development
-    command: ["sh", "-c", "scripts/wait-for map-kit-db:5432 -- python /app/src/manage.py runserver 0.0.0.0:8000"]
-    depends_on: 
-      - map-kit-db
-    environment:
-      - POSTGRES_HOST
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_PORT
-      - POSTGRES_DB
-      - DEBUG
-      - ALLOWED_HOSTS
-      - CORS_ALLOW_ALL_ORIGINS
-      - DJANGO_SETTINGS_MODULE
-      - DJANGO_EMAIL_BACKEND
-      - SENDGRID_API_KEY
-      - OIDC_RP_CLIENT_ID
-      - OIDC_RP_CLIENT_SECRET
-      - OIDC_OP_JWKS_ENDPOINT
-      - OIDC_OP_AUTHORIZATION_ENDPOINT
-      - OIDC_OP_TOKEN_ENDPOINT
-      - OIDC_OP_USER_ENDPOINT
-      - ADMIN_URL
-      - ADMIN_CONTACT_EMAIL
-      - DEFAULT_FROM_EMAIL
+    map-kit-api:
+        container_name: map-kit-api
+        restart: "always"
+        build:
+            context: .
+            args:
+                ENV: development
+        command:
+            [
+                "sh",
+                "-c",
+                "scripts/wait-for map-kit-db:5432 -- python
+                /app/src/manage.py runserver 0.0.0.0:8000",
+            ]
+        depends_on:
+            - map-kit-db
+        environment:
+            - POSTGRES_HOST
+            - POSTGRES_USER
+            - POSTGRES_PASSWORD
+            - POSTGRES_PORT
+            - POSTGRES_DB
+            - DEBUG
+            - ALLOWED_HOSTS
+            - CORS_ALLOW_ALL_ORIGINS
+            - DJANGO_SETTINGS_MODULE
+            - DJANGO_EMAIL_BACKEND
+            - SENDGRID_API_KEY
+            - OIDC_RP_CLIENT_ID
+            - OIDC_RP_CLIENT_SECRET
+            - OIDC_OP_JWKS_ENDPOINT
+            - OIDC_OP_AUTHORIZATION_ENDPOINT
+            - OIDC_OP_TOKEN_ENDPOINT
+            - OIDC_OP_USER_ENDPOINT
+            - ADMIN_URL
+            - ADMIN_CONTACT_EMAIL
+            - DEFAULT_FROM_EMAIL
 
-    volumes:
-      - .:/app
-    ports:
-      - 8000:8000
+        volumes:
+            - .:/app
+        ports:
+            - 8000:8000
 
 volumes:
-  postgres-data: {}
+    postgres-data: {}
