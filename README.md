@@ -1,39 +1,67 @@
 # The Romanian Diaspora Map Kit
 
 This project is created by [DCB](https://diasporacivica.berlin) and aims to facilitate the creation of community maps by and for Romanian diaspora communities across the globe.
+
 The Map Kit allows members of these communities to create their own map based application to manage and share POIs around a certain region. Its goal is to provide clear information on places of interest and services in demand among the Romanian diaspora in the city and its surroundings.
 
-## Set up for development
+## Requirements
 
-### Requirements
+- [Poetry](https://python-poetry.org/docs/)
+- [Docker](https://docs.docker.com/get-docker/)
 
-* docker-compose
-* poetry
+## Install
 
-### First steps
+1. Clone the repo
+2. Create Docker containers
 
-* Clone the repo.
-* Make sure you have Docker and Docker Compose installed.
-* Run all the required containers with `docker-compose up`. The minimum of env variables required to run the app will be picked up automatically from `.env` by Docker Compose.
-* Apply the migrations if you're setting up for the first time: `docker exec -t map-kit-api python src/manage.py migrate`
-* You're good to go! Any changes will be reflected in the containers as well, thanks to Docker volumes. The app is available under port `8000`.
-* Try out the public endpoints of the API! (e. g. `curl localhost:8000/api/categories/`)
-* Create a superuser for the Django admin with `docker exec -t map-kit-api python src/manage.py createsuperuser` and then log into the admin panel with those credentials: http://localhost:8000/admin 
-  (make sure the email for this user will not coincide with the mail of your google account from which you'll create your working user (hint: admin@example.com), 
-  or otherwise, you'll get an error later when working with endpoints requiring a jwt, and in this case you can solve the problem by removing the user and registering it again (the 2 users with the same mail will be merged))
-* When you create a new username (google login, Auth0), make sure you set it to 'approved' in django's admin section, otherwise none of the api endpoints that require a jwt token (i.e. /my-communities/*) will work.
+```bash
+docker compose up
+```
 
-### Setting up authentication
+3. Apply the migrations if you're setting up for the first time
 
-We use token based auth and authenticate users with OIDC via Auth0. To set up auth, you need access to Auth0 and you need to set a bunch of env variables so that get picked up by docker-compose and get injected into the app container. If you look in the docker-compose config, you'll find all of them, it's the variables prefixed with `OIDC_`.
+```bash
+docker exec -t map-kit-api python src/manage.py migrate
+```
+
+## Run
+
+Endpoints are reachable on port [8000](localhost:8000).
+
+## Configure Django
+
+### Create a superuser
+
+```bash
+docker exec -t map-kit-api python src/manage.py createsuperuser
+```
+
+:warning: Make sure the email for this user will not coincide with the mail of your google account from which you'll create your working user. (hint: <admin@example.com>). Otherwise, you'll get an error later when working with endpoints requiring a jwt.
+
+Log into the [admin panel](http://localhost:8000/admin) with those credentials.
+
+### Create working user
+
+When you create a new username (google login, Auth0), make sure you set it to 'approved' in Django's admin section, otherwise none of the api endpoints that require a jwt token (i.e. /my-communities/*) will work.
+
+## Authentication
+
+We use token based auth and authenticate users with [OIDC](https://auth0.com/docs/authenticate/protocols/openid-connect-protocol) via [Auth0](https://auth0.com/).
 
 The backend just uses tokens that it receives, it does not do anything else (issuing, refreshing tokens etc.). The frontend will have to prompt the user to start the social login flow via Auth0, get a token, and then use that token in any subsequent requests to the backend.
 
 We use Auth0 because it makes managing multiple authentication providers (Google, Facebook etc.) much easier. We can add new ones or remove one without touching the application configuration.
 
-### Running tests
+### Set-up
 
-The most convenient way of running the tests is inside the container of the app:
+1. Adjust Auth0 variables (prefixed `OIDC_`) in .env.
+2. Build your containers again.
+
+**TODO**
+
+- [ ] Expand this section.
+
+## Test
 
 ```bash
 docker exec -it map-kit-api pytest src/tests/
@@ -41,6 +69,20 @@ docker exec -it map-kit-api pytest src/tests/
 
 You can still profit from full interactivity with the debugger in this testing setup, if needed.
 
-### Quality checks
+## Lint
 
-Currently there are two quality checks, both enforced by a GitHub Actions workflow: Autoformatting with `black` and testing. Please make sure that you have your code formatted properly and that the tests are running before committing and pushing, so that you avoid unnecessary long feedback loops after checking in code that doesn't pass the checks. In the future we will add pre-commit hooks to simplify this.
+```bash
+docker exec -it map-kit-api black src
+```
+
+In the future we will add pre-commit hooks to simplify this.
+
+## Troubleshoot
+
+### Django User Conflict
+
+**Problem**
+Admin and working user are the same.
+
+**Solution**
+Remove the user and registering it again. The 2 users with the same email will be merged.
