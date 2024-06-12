@@ -26,7 +26,6 @@ router.register(
 urlpatterns = [
     path("location-proposal/", LocationProposalView.as_view()),
     path("user/", UserView.as_view()),
-    path("silk/", include("silk.urls", namespace="silk")),
 ]
 
 urlpatterns += router.urls
