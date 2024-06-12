@@ -17,6 +17,16 @@ import sentry_sdk
 from django.core.management.utils import get_random_secret_key
 from sentry_sdk.integrations.django import DjangoIntegration
 
+
+def filter_health_check(event, hint):
+    """
+    Sentry filtering function for excluding the health check endpoint.
+    """
+    if "/health/" in event.get("transaction", ""):
+        return None
+    return event
+
+
 if SENTRY_DSN := os.environ.get("SENTRY_DSN", None):
     sentry_sdk.init(
         dsn=SENTRY_DSN,
@@ -30,6 +40,8 @@ if SENTRY_DSN := os.environ.get("SENTRY_DSN", None):
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True,
+        # Exclude the /health endpoint, as it's irrelevant for this purpose.
+        before_send=filter_health_check,
     )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
