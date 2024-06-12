@@ -17,19 +17,31 @@ import sentry_sdk
 from django.core.management.utils import get_random_secret_key
 from sentry_sdk.integrations.django import DjangoIntegration
 
+
+def filter_health_check(event, hint):
+    """
+    Sentry filtering function for excluding the health check endpoint.
+    """
+    if "/health/" in event.get("transaction", ""):
+        return None
+    return event
+
+
 if SENTRY_DSN := os.environ.get("SENTRY_DSN", None):
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[
             DjangoIntegration(),
         ],
-        # Set traces_sample_rate to 1.0 to capture 100%
-        # of transactions for performance monitoring.
-        # We recommend adjusting this value in production.
-        traces_sample_rate=0.01,
+        # We do tracing and profiling on 100% of transactions, this should
+        # work fine considering we have a low traffic application.
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
         # If you wish to associate users to errors (assuming you are using
         # django.contrib.auth) you may enable sending PII data.
         send_default_pii=True,
+        # Exclude the /health endpoint, as it's irrelevant for this purpose.
+        before_send=filter_health_check,
     )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
