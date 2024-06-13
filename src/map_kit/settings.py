@@ -23,11 +23,7 @@ def trace_sampler(sampling_context):
     Sets custom trace sample rates for different transactions.
     For now it filters out the health endpoint.
     """
-    if (
-        sampling_context.get("transaction_context", {})
-        .get("name", "")
-        .endswith("/health/")
-    ):
+    if sampling_context.get("name", "").endswith("/health/"):
         return 0.0
 
     return 1.0
