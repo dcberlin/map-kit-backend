@@ -18,31 +18,33 @@ The Map Kit allows members of these communities to create their own map based ap
 docker compose up
 ```
 
-3. Apply the migrations if you're setting up for the first time
-
-```bash
-docker exec -t map-kit-api python src/manage.py migrate
-```
-
 ## Run
 
-Endpoints are reachable on port [8000](localhost:8000).
+Endpoints are reachable on port [8000](http://localhost:8000).
 
 ## Configure Django
 
-### Create a superuser
+### Superuser
 
-```bash
-docker exec -t map-kit-api python src/manage.py createsuperuser
-```
+Will be injected per script with the following info:
 
-:warning: Make sure the email for this user will not coincide with the mail of your google account from which you'll create your working user. (hint: <admin@example.com>). Otherwise, you'll get an error later when working with endpoints requiring a jwt.
+user: god
+password: god
+email: <god@dcb.berlin>
 
 Log into the [admin panel](http://localhost:8000/admin) with those credentials.
 
 ### Create working user
 
 When you create a new username (google login, Auth0), make sure you set it to 'approved' in Django's admin section, otherwise none of the api endpoints that require a jwt token (i.e. /my-communities/*) will work.
+
+### Populate Database
+
+Run
+
+```bash
+docker exec -t map-kit-api python src/manage.py loaddata src/locations/fixtures/*
+```
 
 ## Authentication
 

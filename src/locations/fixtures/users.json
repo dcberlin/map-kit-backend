@@ -1,0 +1,21 @@
+[
+    {
+        "model": "locations.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$320000$p2LqSFZgbqX5xIn5aT3B5a$1H9bIiwPIAE//FmhwQ3M/G1KDqoHcuMCBiSFW/JQofM=",
+            "last_login": null,
+            "is_superuser": true,
+            "username": "god",
+            "first_name": "Ion",
+            "last_name": "Iliescu",
+            "email": "god@dcb.berlin",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-06-13T14:07:39.561Z",
+            "approved": false,
+            "groups": [],
+            "user_permissions": []
+        }
+    }
+]

@@ -1,0 +1,28 @@
+[
+    {
+        "model": "locations.community",
+        "pk": 1,
+        "fields": {
+            "name": "Berlin",
+            "description": "",
+            "bbox": "[\"12.96169823556626\", \"52.400170761724766\", \"13.819593954550793\", \"52.6359650326227\"]",
+            "published": true,
+            "approved": true,
+            "path_slug": "berlin",
+            "admin_users": [1]
+        }
+    },
+    {
+        "model": "locations.community",
+        "pk": 2,
+        "fields": {
+            "name": "Magdeburg",
+            "description": "Comunitatea din MB",
+            "bbox": "[\"11.563880383487842\", \"52.0270390321471\", \"12.017963390382581\", \"52.106705404002795\"]",
+            "published": false,
+            "approved": false,
+            "path_slug": "magdeburg",
+            "admin_users": [1]
+        }
+    }
+]

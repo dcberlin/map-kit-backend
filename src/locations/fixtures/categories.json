@@ -5,7 +5,8 @@
     "fields": {
       "name_slug": "counceling-center",
       "label_singular": "Birou de consiliere",
-      "label_plural": "Birouri de consiliere"
+      "label_plural": "Birouri de consiliere",
+      "color": "#F01AFF"
     }
   },
   {
@@ -14,7 +15,8 @@
     "fields": {
       "name_slug": "institution-or-ngo",
       "label_singular": "Instituție/asociație",
-      "label_plural": "Instituții/asociații"
+      "label_plural": "Instituții/asociații",
+      "color": "#F01AFF"
     }
   },
   {
@@ -23,7 +25,8 @@
     "fields": {
       "name_slug": "food",
       "label_singular": "Mâncare",
-      "label_plural": "Mâncare"
+      "label_plural": "Mâncare",
+      "color": "#F01AFF"
     }
   },
   {
@@ -32,7 +35,8 @@
     "fields": {
       "name_slug": "attorney",
       "label_singular": "Avocat",
-      "label_plural": "Avocați"
+      "label_plural": "Avocați",
+      "color": "#F01AFF"
     }
   },
   {
@@ -41,7 +45,8 @@
     "fields": {
       "name_slug": "parcel-service",
       "label_singular": "Firmă de curierat",
-      "label_plural": "Firme de curierat"
+      "label_plural": "Firme de curierat",
+      "color": "#F01AFF"
     }
   },
   {
@@ -50,7 +55,8 @@
     "fields": {
       "name_slug": "cultural-venue",
       "label_singular": "Spațiu cultural",
-      "label_plural": "Spații culturale"
+      "label_plural": "Spații culturale",
+      "color": "#F01AFF"
     }
   },
   {
@@ -59,7 +65,8 @@
     "fields": {
       "name_slug": "ngo",
       "label_singular": "Asociație",
-      "label_plural": "Asociații"
+      "label_plural": "Asociații",
+      "color": "#F01AFF"
     }
   },
   {
@@ -68,7 +75,8 @@
     "fields": {
       "name_slug": "church",
       "label_singular": "Biserică",
-      "label_plural": "Biserici"
+      "label_plural": "Biserici",
+      "color": "#F01AFF"
     }
   },
   {
@@ -77,7 +85,8 @@
     "fields": {
       "name_slug": "medic",
       "label_singular": "Medic",
-      "label_plural": "Medici"
+      "label_plural": "Medici",
+      "color": "#F01AFF"
     }
   },
   {
@@ -86,7 +95,8 @@
     "fields": {
       "name_slug": "translator",
       "label_singular": "Traducător",
-      "label_plural": "Traducători"
+      "label_plural": "Traducători",
+      "color": "#F01AFF"
     }
   },
   {
@@ -95,7 +105,8 @@
     "fields": {
       "name_slug": "accountant",
       "label_singular": "Contabil",
-      "label_plural": "Contabili"
+      "label_plural": "Contabili",
+      "color": "#F01AFF"
     }
   }
 ]
