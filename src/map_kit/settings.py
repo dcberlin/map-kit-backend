@@ -208,7 +208,6 @@ REST_FRAMEWORK = {
 }
 
 STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
@@ -274,3 +273,4 @@ SENDGRID_TPL_LOCATION_FLAG_MANAGER = os.environ.get(
 SENDGRID_TPL_NEW_COMMUNITY_PROPOSAL = os.environ.get(
     "SENDGRID_TPL_NEW_COMMUNITY_PROPOSAL"
 )
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
