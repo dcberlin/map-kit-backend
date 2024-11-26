@@ -25,7 +25,7 @@ django-colorfield = "^0.7.1"
 django-anymail = "^8.6"
 
 [tool.poetry.dev-dependencies]
-black = "^22.3"
+black = "^24.3"
 pytest = "^7.1.2"
 pytest-django = "^4.5.2"
 
